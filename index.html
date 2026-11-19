@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Comidita · Mapa de Expansión – Modelo</title>
+  <meta name="description" content="Demo con datos ficticios: mapa interactivo para evaluar dónde abrir nuevas sucursales de una cadena de cafeterías en CABA y AMBA.">
+  <meta name="theme-color" content="#0F171F">
+  <meta property="og:title" content="Comidita · Mapa de Expansión – Modelo">
+  <meta property="og:description" content="Demo con datos ficticios · Fictional-data demo. Mapa de expansión para una cadena de cafeterías.">
+  <meta property="og:image" content="assets/logo-512.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/logo-32.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="assets/logo-64.png" alt="" width="36" height="36">
+      <div class="brand-text">
+        <strong>Comidita</strong>
+        <span data-i18n="app.subtitle">Mapa de Expansión – Modelo</span>
+      </div>
+    </div>
+    <span class="demo-pill" data-i18n="demo.pill">Demo · datos ficticios</span>
+    <form class="search" id="search-form" autocomplete="off">
+      <input id="search-input" type="search" data-i18n-placeholder="search.placeholder" placeholder="Evaluar una dirección…">
+      <button type="submit" data-i18n="search.go">Evaluar</button>
+    </form>
+    <div class="lang" role="group" aria-label="Idioma / Language">
+      <button type="button" data-lang="es">ES</button>
+      <button type="button" data-lang="en">EN</button>
+    </div>
+    <button type="button" class="panel-toggle" id="panel-toggle" data-i18n="panel.toggle">Panel</button>
+  </header>
+
+  <div class="demo-banner" id="demo-banner" role="note">
+    <span data-i18n="demo.banner">Esta es una demo con datos ficticios. La cadena, sus sedes, formatos y ventas son inventados; las capas de contexto (censo, transporte, barrios) son datos públicos.</span>
+    <button type="button" id="demo-banner-close" aria-label="Cerrar / Close">×</button>
+  </div>
+
+  <main class="layout">
+    <div id="map" aria-label="Mapa"></div>
+
+    <aside class="panel" id="panel">
+      <nav class="tabs" role="tablist">
+        <button type="button" role="tab" class="tab active" data-tab="map" data-i18n="tab.map">Mapa</button>
+        <button type="button" role="tab" class="tab" data-tab="opps" data-i18n="tab.opps">Oportunidades</button>
+        <button type="button" role="tab" class="tab" data-tab="stores" data-i18n="tab.stores">Sedes</button>
+      </nav>
+
+      <!-- Map tab -->
+      <section class="tab-body active" data-body="map">
+        <h3 data-i18n="map.variable">Variable del mapa</h3>
+        <div class="choice-list" id="variable-list"></div>
+        <label class="slider-row">
+          <span data-i18n="map.opacity">Opacidad</span>
+          <input type="range" id="opacity" min="0.2" max="0.9" step="0.05" value="0.65">
+        </label>
+        <div class="legend" id="legend"></div>
+
+        <h3 data-i18n="map.reference">Capas de referencia</h3>
+        <div class="check-list" id="overlay-list"></div>
+
+        <h3 data-i18n="map.basemap">Mapa base</h3>
+        <div class="segmented" id="basemap">
+          <button type="button" data-base="dark" class="active" data-i18n="map.dark">Oscuro</button>
+          <button type="button" data-base="light" data-i18n="map.light">Claro</button>
+        </div>
+
+        <details class="method">
+          <summary data-i18n="method.title">¿Cómo se calcula el índice?</summary>
+          <div id="method-body"></div>
+        </details>
+      </section>
+
+      <!-- Opportunities tab -->
+      <section class="tab-body" data-body="opps">
+        <p class="hint" data-i18n="opps.intro">Radios censales con índice alto que quedan fuera del radio de cobertura de las sedes actuales.</p>
+        <label class="slider-row">
+          <span><span data-i18n="opps.minIndex">Índice mínimo</span> <b id="min-ix-val">75</b></span>
+          <input type="range" id="min-ix" min="50" max="95" step="5" value="75">
+        </label>
+        <label class="slider-row">
+          <span><span data-i18n="opps.radius">Cobertura por sede</span> <b id="radius-val">700 m</b></span>
+          <input type="range" id="radius" min="300" max="1500" step="100" value="700">
+        </label>
+        <div class="segmented" id="scope">
+          <button type="button" data-scope="all" class="active" data-i18n="scope.all">Todo</button>
+          <button type="button" data-scope="caba" data-i18n="scope.caba">CABA</button>
+          <button type="button" data-scope="pba" data-i18n="scope.pba">Provincia</button>
+        </div>
+        <div class="kpis" id="opp-kpis"></div>
+        <div class="list-head">
+          <h3 data-i18n="opps.ranking">Ranking de áreas</h3>
+          <button type="button" class="link-btn" id="export-csv" data-i18n="opps.export">Exportar CSV</button>
+        </div>
+        <ol class="opp-list" id="opp-list"></ol>
+      </section>
+
+      <!-- Stores tab -->
+      <section class="tab-body" data-body="stores">
+        <div class="kpis" id="store-kpis"></div>
+        <input type="search" id="store-filter" class="filter" data-i18n-placeholder="stores.filter" placeholder="Filtrar por nombre o zona…">
+        <div class="chips" id="format-chips"></div>
+        <ul class="store-list" id="store-list"></ul>
+      </section>
+
+      <footer class="panel-foot">
+        <p data-i18n-html="foot.sources">Fuentes públicas: INDEC (Censo 2022), RENABAP, BA Data, IGN, OpenStreetMap / CARTO.</p>
+        <p data-i18n="foot.fiction">Sedes, formatos, superficies y tickets: ficticios.</p>
+      </footer>
+    </aside>
+  </main>
+
+  <div class="loader" id="loader"><div class="spinner"></div><span data-i18n="loading">Cargando datos…</span></div>
+
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
