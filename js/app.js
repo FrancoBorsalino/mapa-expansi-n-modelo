@@ -3,6 +3,8 @@
   'use strict';
 
   const BRAND = 'Comidita';
+  // CARTO basemaps need a key: request a free one at https://carto.com/basemaps/apikey and paste it here.
+  const CARTO_KEY = 'cb1_28jq_1_ec4565e452c8a31a09bc245d';
   const T = (k, v) => I18N.t(k, v);
   const N = (n, d) => I18N.num(n, d);
 
@@ -121,8 +123,8 @@
     if (labelLayer) map.removeLayer(labelLayer);
     const v = kind === 'light' ? 'light' : 'dark';
     const attr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>';
-    baseLayer = L.tileLayer(`https://{s}.basemaps.cartocdn.com/${v}_nolabels/{z}/{x}/{y}{r}.png`, { attribution: attr, subdomains: 'abcd', maxZoom: 19 }).addTo(map);
-    labelLayer = L.tileLayer(`https://{s}.basemaps.cartocdn.com/${v}_only_labels/{z}/{x}/{y}{r}.png`, { subdomains: 'abcd', maxZoom: 19, pane: 'labels' }).addTo(map);
+    baseLayer = L.tileLayer(`https://{s}.basemaps.cartocdn.com/${v}_nolabels/{z}/{x}/{y}{r}.png?key=${CARTO_KEY}`, { attribution: attr, subdomains: 'abcd', maxZoom: 19 }).addTo(map);
+    labelLayer = L.tileLayer(`https://{s}.basemaps.cartocdn.com/${v}_only_labels/{z}/{x}/{y}{r}.png?key=${CARTO_KEY}`, { subdomains: 'abcd', maxZoom: 19, pane: 'labels' }).addTo(map);
     document.querySelectorAll('#basemap button').forEach(b => b.classList.toggle('active', b.dataset.base === v));
   }
 
