@@ -4,7 +4,7 @@
 > "Comidita" es una cadena de cafeterías inventada. Sus 35 sedes, formatos, superficies y tickets son ficticios. Las capas de contexto (censo, transporte, barrios) son datos públicos.
 > *"Comidita" is a made-up coffee chain. Its 35 stores, formats, floor areas and tickets are fictional. Context layers (census, transit, neighbourhoods) are public data.*
 
-**Demo en vivo · Live demo:** https://francoborsalino.github.io/mapa-expansion-modelo/
+**Demo en vivo · Live demo:** https://francoborsalino.github.io/mapa-expansi-n-modelo/
 
 ---
 
